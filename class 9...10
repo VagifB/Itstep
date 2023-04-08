@@ -1,0 +1,11 @@
+class GeneratorIterable:
+    def __init__(self, n):
+        self.n = n
+
+    def __iter__(self):
+        for i in range(self.n):
+            yield i
+iterable = GeneratorIterable(5)
+
+for i in iterable:
+    print(i)

@@ -1,0 +1,94 @@
+import pickle
+
+
+class Person:
+    def __init__(self, name, age, gender):
+        self.name = name
+        self.age = age
+        self.gender = gender
+
+
+class Teacher(Person):
+    def __init__(self, name, age, gender, subject):
+        super().__init__(name, age, gender)
+        self.subject = subject
+
+    def teach(self):
+        print(f"{self.name} is teaching {self.subject}.")
+
+
+class Student(Person):
+    def __init__(self, name, age, gender, grade):
+        super().__init__(name, age, gender)
+        self.grade = grade
+
+    def take_test(self, test):
+        try:
+            result = test.run_test()
+        except Exception as e:
+            print(f"Error occurred during test: {e}")
+
+
+
+
+
+        else:
+            self.save_test_result(result)
+            print(f"{self.name} scored {result} on the test.")
+
+    def save_test_result(self, result):
+        with open(f"{self.name}_test_result.txt", "w") as f:
+            f.write(str(result))
+
+
+class Test:
+    def __init__(self, questions):
+        self.questions = questions
+
+    def run_test(self):
+        score = 0
+        for question, answer in self.questions.items():
+            response = input(question)
+            if response == answer:
+                score += 1
+        return score
+
+
+def save_to_file(obj, file_name):
+    with open(file_name, 'wb') as f:
+        pickle.dump(obj, f)
+
+
+def load_from_file(file_name):
+    with open(file_name, 'rb') as f:
+        return pickle.load(f)
+
+
+def main():
+    math_teacher = Teacher("Randy Alcaso", 26, "Male", "Math")
+    english_teacher = Teacher("Lilly Pronto", 99, "Female", "english")
+
+    morgan = Student("Morgan", 15, "Female", "9th Grade")
+    steev = Student("Steev", 16, "Male", "6th Grade")
+
+    math_teacher.teach()
+    english_teacher.teach()
+
+    test_questions = {"What is 430-429?": "401", "What is an object called which you may see through?": "Transparent"}
+    test = Test(test_questions)
+
+    morgan.take_test(test)
+    steev.take_test(test)
+
+    save_to_file([math_teacher, english_teacher, morgan, steev], "school_data.pkl")
+
+    # load the objects from the file
+    loaded_objects = load_from_file("school_data.pkl")
+    for obj in loaded_objects:
+        print(obj)
+
+
+if __name__ == "__main__":
+    main()
+'new things i learned :       "Super(),     pickle, F string ()'
+
